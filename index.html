@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b3a2c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Межрегионпромстройторгинвестсбервкладбанк — учебный интернет-банк</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=PT+Sans:wght@400;700&family=PT+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#0b3a2c; --green2:#145c45; --gold:#c9a227; --gold2:#e7cf7a;
+  --paper:#f7f2e6; --card:#fffdf7; --ink:#1d1d1b; --muted:#6b675d;
+  --red:#b3261e; --ok:#1f7a3f; --line:#e2d9c2;
+  --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:"PT Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  background:var(--paper); color:var(--ink); font-size:16px; line-height:1.45;
+  -webkit-user-select:none; user-select:none; -webkit-touch-callout:none;
+  min-height:100vh; min-height:100dvh;
+}
+input,select,textarea,button{font:inherit;font-size:16px}
+input,select,textarea{-webkit-user-select:text;user-select:text}
+h1,h2,h3{font-family:"PT Serif",Georgia,serif;line-height:1.2;margin:0 0 .5em}
+.top{
+  position:sticky;top:0;z-index:20;background:var(--green);color:#fff;
+  padding:calc(var(--safe-t) + 8px) 14px 8px;display:flex;align-items:center;gap:10px;
+  border-bottom:3px solid var(--gold);
+}
+.logo{flex:0 0 auto;width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--gold2),var(--gold) 60%,#8c6d10);display:grid;place-items:center;color:var(--green);font-family:"PT Serif",serif;font-weight:700;font-size:13px;letter-spacing:-.5px;box-shadow:0 0 0 2px #fff3 inset}
+.brand{flex:1 1 auto;min-width:0;overflow:hidden}
+.marquee{white-space:nowrap;font-family:"PT Serif",serif;font-weight:700;font-size:15px;display:inline-block;animation:run 14s linear infinite;padding-left:100%}
+@keyframes run{to{transform:translateX(-100%)}}
+.brand small{display:block;font-size:11px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.timer{flex:0 0 auto;font-family:"PT Mono",monospace;background:#0006;border:1px solid var(--gold);border-radius:8px;padding:4px 8px;font-size:15px;min-width:64px;text-align:center}
+.timer.warn{background:var(--red);border-color:#fff}
+.timer:empty{display:none}
+main{max-width:760px;margin:0 auto;padding:16px 14px calc(40px + var(--safe-b))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:0 0 14px;box-shadow:0 1px 0 #0000000a}
+.hero{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border:0;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;border:18px solid #c9a22733}
+.hero h1{font-size:clamp(22px,6.4vw,34px);overflow-wrap:anywhere;word-break:break-all;hyphens:auto;color:var(--gold2)}
+.hero p{margin:.3em 0;opacity:.92;position:relative;z-index:1}
+.lic{font-size:12px;opacity:.7}
+label{display:block;font-weight:700;margin:12px 0 4px}
+input[type=text],input[type=number],input:not([type]),select{
+  width:100%;padding:11px 12px;border:1px solid #cfc4a8;border-radius:10px;background:#fff;color:var(--ink);
+  -webkit-appearance:none;appearance:none;
+}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--green) 50%),linear-gradient(135deg,var(--green) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:32px}
+input:focus,select:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+.btn{display:block;width:100%;border:0;border-radius:12px;padding:14px 16px;background:var(--gold);color:var(--green);font-weight:700;font-size:17px;cursor:pointer;margin-top:16px;box-shadow:0 3px 0 #8c6d10}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #8c6d10}
+.btn.green{background:var(--green);color:#fff;box-shadow:0 3px 0 #04190f}
+.btn[disabled]{opacity:.5}
+.err{color:var(--red);font-size:14px;margin-top:6px;min-height:1em}
+.ops{list-style:none;margin:0;padding:0}
+.op{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.op:last-child{border-bottom:0}
+.op .n{flex:0 0 34px;height:34px;border-radius:8px;background:var(--paper);border:1px solid var(--line);display:grid;place-items:center;font-weight:700;color:var(--green)}
+.op .t{flex:1;min-width:0}
+.op .t b{display:block}
+.op .t span{font-size:13px;color:var(--muted)}
+.op .s{flex:0 0 auto;font-weight:700;font-size:14px;text-align:right}
+.op.done .n{background:var(--green);color:#fff}
+.op.locked{opacity:.45}
+.op.current .n{background:var(--gold);color:var(--green)}
+.balance{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.balance .sum{font-family:"PT Serif",serif;font-size:32px;font-weight:700;color:var(--gold2)}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:20px;background:#c9a22722;color:#7a5e00;font-weight:700}
+.task-h{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+.q{border-top:1px solid var(--line);padding:12px 0}
+.q:first-of-type{border-top:0}
+.q .qt{font-weight:700;margin-bottom:6px}
+.hint{font-size:14px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:620px){.grid2{grid-template-columns:1fr 1fr}}
+.offer{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}
+.offer h3{font-size:18px;margin-bottom:4px;color:var(--green)}
+.offer .rate{font-size:26px;font-family:"PT Serif",serif;font-weight:700;color:var(--green)}
+.offer ul{margin:6px 0 8px;padding-left:18px;font-size:14px}
+.radio{display:flex;flex-wrap:wrap;gap:8px}
+.radio label{font-weight:400;margin:0;display:flex;align-items:center;gap:6px;padding:9px 12px;border:1px solid #cfc4a8;border-radius:10px;background:#fff;cursor:pointer;flex:1 1 auto}
+.radio input{width:18px;height:18px;accent-color:var(--green);margin:0}
+.radio label:has(input:checked){border-color:var(--green);background:#0b3a2c10}
+.check label{font-weight:400;display:flex;gap:8px;align-items:flex-start;margin:6px 0;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.check input{width:20px;height:20px;flex:0 0 20px;accent-color:var(--green);margin-top:1px}
+.contract{font-family:"PT Serif",serif;font-size:15px;background:#fffef9;border:1px solid var(--line);border-radius:6px;padding:14px;counter-reset:cl}
+.contract h3{text-align:center;font-size:16px}
+.cl{padding:8px 10px;border-radius:6px;margin:4px 0;cursor:pointer;border:1px solid transparent;position:relative;padding-left:34px}
+.cl:before{counter-increment:cl;content:counter(cl)".";position:absolute;left:8px;top:8px;font-weight:700;color:var(--muted)}
+.cl.small{font-size:12.5px;color:#444}
+.cl.sel{background:#b3261e14;border-color:var(--red)}
+.cl.sel:after{content:"⚑";position:absolute;right:8px;top:6px;color:var(--red)}
+.chat{display:flex;flex-direction:column;gap:12px}
+.chat>.msg{min-width:0}
+select{max-width:100%;min-width:0;text-overflow:ellipsis}
+html,body{overflow-x:hidden}
+.msg{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px}
+.msg .who{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:6px;margin-bottom:6px}
+.msg .bubble{background:#eef3ef;border-radius:12px 12px 12px 4px;padding:10px 12px;margin-bottom:10px}
+.msg.call .bubble{background:#fdf1e6}
+.msg.push .bubble{background:#eef0fb}
+.fb{margin-top:6px}
+.fb .item{padding:10px 12px;border-radius:10px;margin:8px 0;font-size:15px;border-left:4px solid var(--ok);background:#1f7a3f0f}
+.fb .item.bad{border-left-color:var(--red);background:#b3261e0d}
+.fb .item b{display:block}
+.score-big{font-family:"PT Serif",serif;font-size:44px;font-weight:700;color:var(--green);line-height:1}
+table.mini{width:100%;border-collapse:collapse;font-size:14px}
+table.mini td{padding:6px 4px;border-bottom:1px dashed var(--line)}
+table.mini td:last-child{text-align:right;white-space:nowrap}
+.alloc{display:grid;grid-template-columns:1fr 130px;gap:8px;align-items:center}
+.alloc input{text-align:right}
+.alloc .lbl{font-size:15px}
+.sumline{margin-top:8px;font-weight:700}
+.sumline.bad{color:var(--red)}
+.foot{font-size:12px;color:var(--muted);text-align:center;margin-top:24px}
+.formula{font-family:"PT Mono",monospace;font-size:14px;background:var(--paper);border-radius:8px;padding:8px 10px;margin:6px 0;overflow-x:auto;white-space:nowrap}
+details{margin-top:10px}
+summary{cursor:pointer;font-weight:700;color:var(--green)}
+.pill{display:inline-block;padding:2px 8px;border-radius:6px;background:var(--paper);border:1px solid var(--line);font-size:13px;margin:2px 4px 2px 0}
+.stamp{display:inline-block;border:3px solid var(--red);color:var(--red);border-radius:8px;padding:4px 10px;font-weight:700;transform:rotate(-4deg);letter-spacing:.05em;text-transform:uppercase;font-size:14px}
+.stamp.ok{border-color:var(--ok);color:var(--ok)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="logo">МРП</div>
+  <div class="brand"><span class="marquee">Межрегионпромстройторгинвестсбервкладбанк · Ваши деньги в надёжных и очень длинных руках · МРПСТИСВБ</span><small id="who">Учебный интернет-банк</small></div>
+  <div class="timer" id="timer"></div>
+</header>
+<main id="app"></main>
+<script src="config.js"></script>
+<script>
+/* ===== Настройки ===== */
+const SCRIPT_URL = (window.MRP_CONFIG && window.MRP_CONFIG.scriptUrl) || ""; // адрес …/exec задаётся в config.js
+const STORE_KEY = "mrpstisvb_v1";
+
+/* ===== Утилиты ===== */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const rub = n => Math.round(n).toLocaleString("ru-RU") + " ₽";
+const pct = n => (Math.round(n*100)/100).toLocaleString("ru-RU") + "%";
+const num = v => { v = String(v ?? "").replace(/[\s\u00a0₽%]/g,"").replace(",","."); return v==="" ? NaN : parseFloat(v); };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function hash(str){ let h=1779033703^str.length; for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19;} return (h>>>0); }
+function mulberry(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function mkRng(seed){
+  const r = mulberry(seed);
+  return {
+    f:r,
+    int:(a,b)=>a+Math.floor(r()*(b-a+1)),
+    step:(a,b,s)=>a+s*Math.floor(r()*(Math.round((b-a)/s)+1)),
+    pick:arr=>arr[Math.floor(r()*arr.length)],
+    shuffle:arr=>{const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  };
+}
+function store(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){} }
+function load(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)||"null"); }catch(e){ return null; } }
+const near = (v, target, tol) => Number.isFinite(v) && Math.abs(v-target) <= tol;
+function fbItem(ok, title, text){ return `<div class="item ${ok?"":"bad"}"><b>${ok?"✓":"✗"} ${title}</b>${text||""}</div>`; }
+function radios(name, opts){ return `<div class="radio">${opts.map(o=>`<label><input type="radio" name="${name}" value="${esc(o.v)}"> ${o.t}</label>`).join("")}</div>`; }
+function getRadio(root, name){ const el = $(`input[name="${name}"]:checked`, root); return el ? el.value : null; }
+
+/* ===== Генерация варианта ===== */
+function genParams(seed){
+  const R = mkRng(seed), P = {};
+  // З2 договор
+  P.c = { rate: R.step(14,19,0.5), fee: R.pick([490,690,990,1290]), cardLim: R.step(100000,500000,50000), cardFee: R.pick([3900,4900,5900]), term: R.pick([6,12,18,24]) };
+  // З3 вклады
+  (()=>{ let tries=0, o;
+    do{
+      const S0 = R.step(50000,300000,10000), r = R.step(13,19,0.5);
+      const ra = r+R.pick([0.5,1,1.5]), rb=r, rc=r+R.pick([0,0.5]), teaser=r+R.pick([4,5,6]), after=r-R.pick([3,4,5]);
+      const inc = {
+        A: S0*ra/100,
+        B: S0*(Math.pow(1+rb/1200,12)-1),
+        C: S0*(Math.pow(1+rc/400,4)-1),
+        D: S0*(teaser/100*3/12 + after/100*9/12)
+      };
+      o = {S0, ra, rb, rc, teaser, after, inc};
+      const v = Object.values(inc).sort((a,b)=>b-a);
+      if (v[0]-v[1] >= 60) break;
+    } while(++tries<50);
+    o.best = Object.entries(o.inc).sort((a,b)=>b[1]-a[1])[0][0];
+    P.dep = o;
+  })();
+  // З4 инфляция
+  (()=>{ const S1=R.step(30000,200000,5000), r1=R.step(8,18,0.5), r2=R.step(5,10,0.5), pi1=Math.max(4, r1-R.step(1,5,0.5));
+    const pi2=r2+R.step(1,4,0.5);
+    const basket=R.step(20000,80000,1000), r4=R.step(6,16,0.5), pi4=r4+R.pick([-3,-2,-1.5,1.5,2,3]);
+    P.inf={S1,r1,pi1,r2,pi2,basket,r4,pi4};
+  })();
+  // З5 страхование
+  (()=>{ const k=1000;
+    const c1=R.step(400,1200,10)*k, c1i=R.step(20,120,5)*k;
+    P.ins=[
+      {id:"i1", t:`Вклад ${rub(c1)} и начисленные проценты ${rub(c1i)} в одном банке`, a:Math.min(c1+c1i,1400000), e:"Проценты входят в страховую сумму, общий лимит на один банк — 1,4 млн ₽."},
+      {id:"i2", t:`Вклад ${rub(R.step(1600,3500,50)*k)} в одном банке`, a:1400000, e:"Сверх 1,4 млн ₽ АСВ не вернёт: остаток включается в реестр требований к банку и возвращается, только если у банка хватит имущества."},
+      (()=>{const x=R.step(700,1350,10)*k,y=R.step(700,1350,10)*k; return {id:"i3", t:`Вклад ${rub(x)} в банке «Альфа-Омега» и вклад ${rub(y)} в банке «Бета-Гамма». Лицензии отозвали у обоих`, a:x+y, e:"Лимит 1,4 млн ₽ считается по каждому банку отдельно."};})(),
+      (()=>{const x=R.step(700,1300,10)*k,y=R.step(300,900,10)*k; return {id:"i4", t:`В одном банке: вклад ${rub(x)} и накопительный счёт ${rub(y)}`, a:Math.min(x+y,1400000), e:"Все счета и вклады в одном банке складываются, лимит 1,4 млн ₽ общий."};})(),
+      {id:"i5", t:`Брокерский счёт, на нём акции на ${rub(R.step(100,900,10)*k)}`, a:0, e:"Брокерские счета и ИИС не входят в систему страхования вкладов. Ценные бумаги принадлежат клиенту и хранятся в депозитарии отдельно от имущества брокера, но АСВ их не страхует."},
+      {id:"i6", t:`Обезличенный металлический счёт (ОМС): золото на ${rub(R.step(100,800,10)*k)}`, a:0, e:"ОМС не застрахованы."},
+      (()=>{const x=R.step(200,1300,10)*k; return {id:"i7", t:`Расчётный счёт индивидуального предпринимателя: ${rub(x)}`, a:x, e:"Деньги ИП застрахованы, лимит тот же — 1,4 млн ₽."};})(),
+      (()=>{const x=R.step(2000,9500,50)*k; return {id:"i8", t:`На счёт месяц назад поступило наследство — ${rub(x)}`, a:x, e:"Деньги от наследства, продажи жилья, социальных и страховых выплат защищены в особом порядке, до 10 млн ₽, если поступили незадолго до отзыва лицензии. Нужно подать заявление и документы о происхождении денег."};})(),
+      {id:"i9", t:`Вложили ${rub(R.step(100,900,10)*k)} в микрофинансовую организацию под ${R.step(20,30,1)}% годовых`, a:0, e:"Вложения в МФО не страхуются."},
+      (()=>{const x=R.step(1500,2800,50)*k; return {id:"i10", t:`Безотзывный сберегательный сертификат на 4 года: ${rub(x)}`, a:x, e:"С 30 октября 2025 года рублёвые вклады по безотзывным сберегательным сертификатам сроком более трёх лет страхуются до 2,8 млн ₽, отдельно от остальных вкладов."};})()
+    ];
+  })();
+  // З6 баланс семьи
+  (()=>{ const k=1000;
+    P.fam=[
+      {t:"Квартира, рыночная стоимость", v:R.step(4000,9000,100)*k, c:"a"},
+      {t:"Остаток долга по ипотеке", v:R.step(1000,3800,50)*k, c:"l"},
+      {t:"Автомобиль, рыночная стоимость", v:R.step(500,2000,50)*k, c:"a"},
+      {t:"Остаток по автокредиту", v:R.step(100,600,10)*k, c:"l"},
+      {t:"Банковский вклад", v:R.step(50,600,10)*k, c:"a"},
+      {t:"Наличные дома", v:R.step(10,80,5)*k, c:"a"},
+      {t:"Долг по кредитной карте", v:R.step(10,120,5)*k, c:"l"},
+      {t:"Занятые у брата деньги", v:R.step(20,200,10)*k, c:"l"},
+      {t:"Облигации федерального займа (ОФЗ)", v:R.step(50,300,10)*k, c:"a"},
+      {t:"Зарплата обоих родителей за месяц", v:R.step(90,200,5)*k, c:"n"},
+      {t:"Расходы на продукты за месяц", v:R.step(20,45,1)*k, c:"n"}
+    ];
+  })();
+  // З7 бюджет
+  (()=>{ let job, sch, ex, sav;
+    do{
+      job=R.step(25000,48000,1000); sch=R.step(2500,6000,500);
+      ex=[["Общежитие",R.step(2500,5000,100)],["Еда",R.step(11000,17000,500)],["Транспорт",R.step(1200,2800,100)],["Мобильная связь и интернет",R.step(400,900,50)],["Одежда",R.step(1500,4000,500)],["Развлечения и кафе",R.step(4000,9000,500)],["Подписки",R.step(300,1200,100)]];
+      sav = job+sch-ex.reduce((s,e)=>s+e[1],0);
+    } while(sav<4000 || sav>20000);
+    const price=R.step(55000,95000,1000), months=R.pick([6,7,8,9,10]);
+    const cut=R.step(1500,3500,500);
+    P.bud={job,sch,ex,sav,price,months,cut};
+  })();
+  // З8 портфель
+  P.port={S:R.step(80000,200000,10000), pyr:R.pick([25,30,35,40])};
+  // З9 мошенники
+  P.fr={a1:R.step(15000,90000,500), a2:R.step(800,4500,10), a3:R.step(5000,25000,1000), a4:R.step(20000,150000,1000), d:R.int(1,28)};
+  // З10 жалобы
+  P.cmp={fee:R.step(300,4000,50), small:R.step(40000,480000,1000), big:R.step(600000,2500000,10000)};
+  P.order = { t1:R.shuffle([...Array(12).keys()]), t9:R.shuffle([...Array(9).keys()]), t10:R.shuffle([...Array(7).keys()]), t11:R.shuffle([...Array(8).keys()]), t5:R.shuffle([...Array(10).keys()]) };
+  return P;
+}
+
+/* ===== Задания ===== */
+const T = [];
+
+/* 1. Карта финансового рынка */
+T.push({ title:"Карта финансового рынка", sub:"Финансовые институты", time:360, build(P){
+  const cats=[["bank","Банк"],["ins","Страховая компания"],["npf","Негосударственный пенсионный фонд"],["mfo","Микрофинансовая организация"],["brk","Брокер"],["reg","Регулятор"],["ill","Нелегальная организация"]];
+  const items=[
+    ["Сберегательный дом «Копейка»: принимает вклады граждан, открывает счета, выдаёт кредиты; лицензия Банка России","bank"],
+    ["«Уральский расчётный»: ведёт счета предпринимателей, выдаёт ипотеку, участник системы страхования вкладов","bank"],
+    ["«Надёжный щит»: продаёт полисы ОСАГО и страхования жизни","ins"],
+    ["«Автостраж»: страхует автомобили по КАСКО и квартиры от пожара","ins"],
+    ["«Пенсионный резерв»: копит пенсионные накопления граждан и выплачивает негосударственную пенсию","npf"],
+    ["«Будущее+»: принимает взносы по программе долгосрочных сбережений, есть лицензия Банка России","npf"],
+    ["«Быстрозайм»: выдаёт займы до 30 000 ₽ на две недели под 0,8% в день, есть в государственном реестре","mfo"],
+    ["«Кредит на карту 24»: займы онлайн за 5 минут, микрофинансовая компания из реестра Банка России","mfo"],
+    ["«ИнвестКурс»: открывает брокерские счета и ИИС, покупает акции и облигации по поручению клиента","brk"],
+    ["Банк России: выдаёт и отзывает лицензии, устанавливает ключевую ставку, проверяет финансовые организации","reg"],
+    ["«Финансовый прорыв»: обещает 30% в месяц и бонус за каждого приглашённого друга, лицензии нет","ill"],
+    ["«Крипто-Миллион»: гарантирует 5% в день от «торговли криптовалютой», зарегистрирован за границей, в справочнике участников финрынка его нет","ill"]
+  ];
+  const ord=P.order.t1;
+  const html = `<p>Распределите организации по типам. Названия вымышленные, описания — нет: смотрите на то, чем организация занимается.</p>` +
+    ord.map(i=>`<div class="q"><div class="qt">${items[i][0]}</div><select data-i="${i}"><option value="">— выберите тип —</option>${cats.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join("")}</select></div>`).join("");
+  return { html, check(root){
+    let s=0, fb="", ans={};
+    ord.forEach(i=>{ const v=$(`select[data-i="${i}"]`,root).value; ans[i]=v; const ok=v===items[i][1]; if(ok)s++;
+      if(!ok) fb+=fbItem(false, items[i][0].split(":")[0], `Правильно: ${cats.find(c=>c[0]===items[i][1])[1]}.`); });
+    if(!fb) fb=fbItem(true,"Все организации распределены верно","");
+    fb+=`<p class="hint">Проверить, есть ли у организации лицензия, можно в «Справочнике участников финансового рынка» на сайте Банка России. Если организации там нет, а она принимает деньги граждан, это повод насторожиться.</p>`;
+    return {score:s, max:12, ans, fb};
+  }};
+}});
+
+/* 2. Договор мелким шрифтом */
+T.push({ title:"Договор мелким шрифтом", sub:"Права потребителя, навязанные услуги", time:420, build(P){
+  const c=P.c;
+  const cls=[
+    [`Банк принимает денежные средства Вкладчика во вклад «Долгий-Предолгий» на срок ${c.term} месяцев.`,0],
+    [`Процентная ставка по вкладу — ${pct(c.rate)} годовых. Проценты капитализируются ежемесячно.`,0],
+    [`Банк вправе в одностороннем порядке снизить процентную ставку по вкладу в любой момент срока, уведомив Вкладчика сообщением в мобильном приложении.`,1,"Банк не вправе в одностороннем порядке уменьшать проценты по срочному вкладу гражданина (ст. 838 ГК РФ)."],
+    [`Вклад можно пополнять в течение первых 30 дней срока.`,0],
+    [`При досрочном расторжении проценты выплачиваются по ставке 0,01% годовых.`,1,"Это законно, но про это нужно знать заранее: снимете деньги раньше срока — потеряете почти весь доход."],
+    [`За обслуживание вклада Банк ежемесячно списывает комиссию ${rub(c.fee)} с суммы вклада.`,1,"Плата за «обслуживание вклада» съедает доход. Обычные вклады такой платы не предусматривают."],
+    [`Банк является участником системы обязательного страхования вкладов.`,0],
+    [`Подписывая договор, Вкладчик соглашается на выпуск кредитной карты с лимитом ${rub(c.cardLim)} и годовым обслуживанием ${rub(c.cardFee)}.`,1,"Навязанная услуга: кредитную карту оформляют вместе с вкладом без отдельного согласия."],
+    [`Часть суммы размещается по программе инвестиционного страхования жизни «Наследие-Премиум»; на эту часть страхование вкладов не распространяется, гарантированная доходность отсутствует.`,1,"Это не вклад, а страховой продукт с риском. АСВ эти деньги не вернёт."],
+    [`Налог на доходы по вкладу удерживается в порядке, установленном Налоговым кодексом РФ.`,0],
+    [`По окончании срока вклад переводится на счёт «Пенсионер+» под 0,01% годовых без дополнительного уведомления Вкладчика.`,1,"Деньги «зависнут» почти без процентов, если вовремя не забрать вклад."],
+    [`Споры разрешаются путём переговоров, а при недостижении согласия — в порядке, установленном законодательством РФ.`,0]
+  ];
+  const html=`<p>Вам предлагают подписать договор вклада. Найдите все пункты, которые невыгодны клиенту или нарушают его права, и нажмите на них (повторное нажатие снимает отметку). За лишние отметки баллы снимаются.</p>
+  <div class="contract"><h3>ДОГОВОР БАНКОВСКОГО ВКЛАДА № ${Math.floor(100000+P.c.fee*37)}</h3>
+  ${cls.map((x,i)=>`<div class="cl ${i>3?"small":""}" data-i="${i}">${x[0]}</div>`).join("")}</div>
+  <p class="hint">Отмечено пунктов: <b id="selN">0</b></p>`;
+  return { html, init(root){ $$(".cl",root).forEach(el=>el.addEventListener("click",()=>{el.classList.toggle("sel"); $("#selN",root).textContent=$$(".cl.sel",root).length;})); },
+  check(root){
+    const sel=$$(".cl.sel",root).map(e=>+e.dataset.i);
+    let s=0, fb="";
+    cls.forEach((x,i)=>{ const m=sel.includes(i);
+      if(x[1]&&m){s+=2; fb+=fbItem(true,`Пункт ${i+1}`,x[2]);}
+      else if(x[1]&&!m){fb+=fbItem(false,`Пункт ${i+1} пропущен`,x[2]);}
+      else if(!x[1]&&m){s-=1; fb+=fbItem(false,`Пункт ${i+1} отмечен зря`,"Это обычное условие договора.");}
+    });
+    return {score:Math.max(0,s), max:12, ans:{sel}, fb};
+  }};
+}});
+
+/* 3. Выбор вклада */
+T.push({ title:"Выбор вклада", sub:"Процентная ставка, капитализация", time:540, build(P){
+  const d=P.dep;
+  const offers=[
+    ["A","«Простой»",d.ra,["Проценты выплачиваются в конце срока","Без капитализации"]],
+    ["B","«Снежный ком»",d.rb,["Ежемесячная капитализация процентов"]],
+    ["C","«Квартальный»",d.rc,["Капитализация раз в квартал"]],
+    ["D","«До "+String(d.teaser).replace(".",",")+"%»",d.teaser,[`${pct(d.teaser)} только первые 3 месяца`,`Следующие 9 месяцев — ${pct(d.after)}`,"Без капитализации"]]
+  ];
+  const html=`<p>У вас ${rub(d.S0)}. Нужно положить их на 1 год. Посчитайте доход по каждому вкладу (в рублях, без налога) и выберите самый выгодный.</p>
+  <details><summary>Формулы</summary>
+  <div class="formula">Без капитализации: доход = S × ставка / 100</div>
+  <div class="formula">Ежемесячная капитализация: доход = S × (1 + ставка/1200)<sup>12</sup> − S</div>
+  <div class="formula">Ежеквартальная: доход = S × (1 + ставка/400)<sup>4</sup> − S</div>
+  <p class="hint">Капитализация — проценты прибавляются к вкладу, и дальше проценты начисляются уже на большую сумму. Допускается погрешность округления до 5 ₽.</p></details>
+  <div class="grid2" style="margin-top:10px">${offers.map(o=>`<div class="offer"><span class="tag">Вклад ${o[0]}</span><h3>${o[1]}</h3><div class="rate">${o[0]==="D"?"до ":""}${pct(o[2])}</div><ul>${o[3].map(x=>`<li>${x}</li>`).join("")}</ul><label>Доход за год, ₽</label><input inputmode="decimal" data-o="${o[0]}" autocomplete="off"></div>`).join("")}</div>
+  <div class="q"><div class="qt">Какой вклад выгоднее всего?</div>${radios("best",offers.map(o=>({v:o[0],t:"Вклад "+o[0]})))}</div>`;
+  return { html, check(root){
+    let s=0, fb="", ans={};
+    offers.forEach(o=>{ const v=num($(`input[data-o="${o[0]}"]`,root).value); ans[o[0]]=v; const ok=near(v,d.inc[o[0]],5); if(ok)s+=2;
+      fb+=fbItem(ok,`Вклад ${o[0]}: ${rub(d.inc[o[0]])}`, ok?"":`Ваш ответ: ${Number.isFinite(v)?rub(v):"нет ответа"}.`); });
+    const b=getRadio(root,"best"); ans.best=b; const ok=b===d.best; if(ok)s+=2;
+    fb+=fbItem(ok,`Самый выгодный — вклад ${d.best}`, `Вклад D рекламирует большую ставку, но действует она только три месяца. Ставку «до …%» всегда пересчитывайте на весь срок.`);
+    return {score:s,max:10,ans,fb};
+  }};
+}});
+
+/* 4. Ставка минус инфляция */
+T.push({ title:"Ставка минус инфляция", sub:"Реальная доходность сбережений", time:420, build(P){
+  const f=P.inf;
+  const real1=((1+f.r1/100)/(1+f.pi1/100)-1)*100, appr1=f.r1-f.pi1;
+  const real2=((1+f.r2/100)/(1+f.pi2/100)-1)*100, appr2=f.r2-f.pi2;
+  const dep4=f.basket*(1+f.r4/100), price4=f.basket*(1+f.pi4/100);
+  const html=`<p>Номинальная ставка показывает, на сколько вырастет сумма. Реальная — на сколько вырастет то, что на эту сумму можно купить.</p>
+  <div class="formula">Точно: реальная ставка = (1 + ставка) / (1 + инфляция) − 1</div>
+  <div class="formula">Приблизительно: реальная ставка ≈ ставка − инфляция</div>
+  <p class="hint">Принимается и точный, и приблизительный ответ.</p>
+  <div class="q"><div class="qt">1. Вклад ${rub(f.S1)} на год под ${pct(f.r1)} без капитализации. Какой доход в рублях?</div><input inputmode="decimal" id="q1"></div>
+  <div class="q"><div class="qt">2. Ставка по вкладу ${pct(f.r1)}, инфляция за год ${pct(f.pi1)}. Какова реальная ставка, %?</div><input inputmode="decimal" id="q2"></div>
+  <div class="q"><div class="qt">3. Ставка ${pct(f.r2)}, инфляция ${pct(f.pi2)}. Реальная ставка, %? (если отрицательная — со знаком минус)</div><input inputmode="text" id="q3">
+    <div class="qt" style="margin-top:8px">Покупательная способность сбережений за год…</div>${radios("q3b",[{v:"up",t:"выросла"},{v:"down",t:"уменьшилась"}])}</div>
+  <div class="q"><div class="qt">4. Набор техники для учёбы стоит ${rub(f.basket)}. Вы кладёте ровно эту сумму на год под ${pct(f.r4)}, а цены за год вырастают на ${pct(f.pi4)}. Хватит ли денег со вклада, чтобы через год купить тот же набор?</div>${radios("q4",[{v:"yes",t:"хватит"},{v:"no",t:"не хватит"}])}</div>`;
+  return { html, check(root){
+    let s=0, fb="", ans={};
+    const v1=num($("#q1",root).value), ok1=near(v1,f.S1*f.r1/100,1); if(ok1)s+=2;
+    fb+=fbItem(ok1,`1. Доход: ${rub(f.S1*f.r1/100)}`, `${rub(f.S1)} × ${f.r1} / 100.`);
+    const v2=num($("#q2",root).value), ok2=Number.isFinite(v2)&&(near(v2,real1,0.15)||near(v2,appr1,0.15)); if(ok2)s+=2;
+    fb+=fbItem(ok2,`2. Реальная ставка ≈ ${pct(appr1)} (точно ${pct(real1)})`,"");
+    const v3=num($("#q3",root).value.replace("−","-")), ok3=Number.isFinite(v3)&&(near(v3,real2,0.15)||near(v3,appr2,0.15)); if(ok3)s+=1;
+    const b3=getRadio(root,"q3b"), ok3b=b3==="down"; if(ok3b)s+=1;
+    fb+=fbItem(ok3&&ok3b,`3. Реальная ставка ≈ ${pct(appr2)} (точно ${pct(real2)}), покупательная способность уменьшилась`,"Сумма на вкладе выросла, но цены выросли сильнее.");
+    const b4=getRadio(root,"q4"), right4=dep4>=price4?"yes":"no", ok4=b4===right4; if(ok4)s+=2;
+    fb+=fbItem(ok4,`4. ${right4==="yes"?"Хватит":"Не хватит"}`,`Через год на вкладе ${rub(dep4)}, а набор будет стоить ${rub(price4)}.`);
+    Object.assign(ans,{v1,v2,v3,b3,b4});
+    return {score:s,max:8,ans,fb};
+  }};
+}});
+
+/* 5. Застрахован или нет */
+T.push({ title:"Застрахован или нет?", sub:"Государственное страхование вкладов", time:420, build(P){
+  const ord=P.order.t5, it=P.ins;
+  const html=`<p>У каждого банка из списка отозвали лицензию. Все банки — участники системы страхования вкладов. Сколько рублей вернёт Агентство по страхованию вкладов (АСВ)? Если ничего — пишите 0.</p>
+  <details><summary>Памятка</summary><ul class="hint">
+  <li>Обычный лимит — 1,4 млн ₽ на одного человека в одном банке, вместе с процентами.</li>
+  <li>Безотзывные сберегательные сертификаты сроком более 3 лет — до 2,8 млн ₽, отдельно от других вкладов.</li>
+  <li>Особые случаи (наследство, продажа жилья, социальные и страховые выплаты, счета эскроу) — до 10 млн ₽.</li>
+  <li>Застрахованы вклады и счета граждан, ИП и малого бизнеса. Не застрахованы брокерские счета, ИИС, металлические счета, вложения в МФО, полисы страхования жизни.</li></ul></details>
+  ${ord.map(i=>`<div class="q"><div class="qt">${it[i].t}</div><input inputmode="decimal" data-i="${i}" placeholder="Сумма, ₽"></div>`).join("")}`;
+  return { html, check(root){
+    let s=0, fb="", ans={};
+    ord.forEach(i=>{ const v=num($(`input[data-i="${i}"]`,root).value); ans[it[i].id]=v; const ok=near(v,it[i].a,1); if(ok)s++;
+      fb+=fbItem(ok, `${it[i].t} → ${rub(it[i].a)}`, it[i].e); });
+    return {score:s,max:10,ans,fb};
+  }};
+}});
+
+/* 6. Семейный баланс */
+T.push({ title:"Семейный баланс", sub:"Финансовые активы и обязательства семьи", time:420, build(P){
+  const it=P.fam;
+  const assets=it.filter(x=>x.c==="a").reduce((s,x)=>s+x.v,0), liab=it.filter(x=>x.c==="l").reduce((s,x)=>s+x.v,0);
+  const html=`<p>Семья Длинноименовых решила составить свой баланс. Для каждой строки укажите: это актив (то, что семье принадлежит), обязательство (то, что семья должна) или ни то ни другое (поток денег за месяц, а не имущество или долг). Затем посчитайте чистый капитал: активы минус обязательства.</p>
+  ${it.map((x,i)=>`<div class="q"><div class="qt">${x.t}: ${rub(x.v)}</div>${radios("f"+i,[{v:"a",t:"актив"},{v:"l",t:"обязательство"},{v:"n",t:"ни то ни другое"}])}</div>`).join("")}
+  <div class="q"><div class="qt">Чистый капитал семьи, ₽</div><input inputmode="decimal" id="net"></div>`;
+  return { html, check(root){
+    let s=0, fb="", ans={};
+    const nm={a:"актив",l:"обязательство",n:"ни то ни другое"};
+    it.forEach((x,i)=>{ const v=getRadio(root,"f"+i); ans["f"+i]=v; const ok=v===x.c; if(ok)s++; else fb+=fbItem(false,x.t,`Правильно: ${nm[x.c]}.${x.c==="n"?" Зарплата и расходы — это доходы и расходы месяца, они меняют баланс, но сами в него не входят.":""}`); });
+    const v=num($("#net",root).value); ans.net=v; const ok=near(v,assets-liab,1); if(ok)s+=3;
+    fb+=fbItem(ok,`Чистый капитал: ${rub(assets)} − ${rub(liab)} = ${rub(assets-liab)}`,"");
+    return {score:s,max:14,ans,fb};
+  }};
+}});
+
+/* 7. Норма сбережений */
+T.push({ title:"Норма сбережений", sub:"Планирование сбережений", time:420, build(P){
+  const b=P.bud, inc=b.job+b.sch, perM=Math.ceil(b.price/b.months), mNew=Math.ceil(b.price/(b.sav+b.cut)), rate=b.sav/inc*100;
+  const html=`<p>Бюджет студентки Ульяны за месяц.</p>
+  <table class="mini"><tr><td><b>Доходы</b></td><td></td></tr><tr><td>Подработка</td><td>${rub(b.job)}</td></tr><tr><td>Стипендия</td><td>${rub(b.sch)}</td></tr>
+  <tr><td><b>Расходы</b></td><td></td></tr>${b.ex.map(e=>`<tr><td>${e[0]}</td><td>${rub(e[1])}</td></tr>`).join("")}</table>
+  <div class="formula">Норма сбережений = сбережения / доход × 100%</div>
+  <div class="q"><div class="qt">1. Сколько Ульяна может откладывать в месяц, ₽?</div><input inputmode="decimal" id="q1"></div>
+  <div class="q"><div class="qt">2. Какова её норма сбережений, %? (с точностью до десятых)</div><input inputmode="decimal" id="q2"></div>
+  <div class="q"><div class="qt">3. Ульяна хочет ноутбук за ${rub(b.price)} через ${b.months} мес. Сколько нужно откладывать в месяц, ₽? (округлите вверх до рубля)</div><input inputmode="decimal" id="q3"></div>
+  <div class="q"><div class="qt">4. Если урезать «Развлечения и кафе» на ${rub(b.cut)} и откладывать всё сэкономленное, за сколько полных месяцев она накопит на ноутбук?</div><input inputmode="decimal" id="q4"></div>`;
+  return { html, check(root){
+    let s=0, fb="", ans={};
+    const v1=num($("#q1",root).value),v2=num($("#q2",root).value),v3=num($("#q3",root).value),v4=num($("#q4",root).value);
+    const o1=near(v1,b.sav,1),o2=near(v2,rate,0.15),o3=near(v3,perM,1),o4=near(v4,mNew,0);
+    s=(o1?2:0)+(o2?2:0)+(o3?2:0)+(o4?2:0);
+    fb+=fbItem(o1,`1. ${rub(inc)} − расходы = ${rub(b.sav)}`,"");
+    fb+=fbItem(o2,`2. Норма сбережений: ${pct(Math.round(rate*10)/10)}`,"Хороший ориентир — откладывать не меньше 10% дохода.");
+    fb+=fbItem(o3,`3. ${rub(b.price)} / ${b.months} ≈ ${rub(perM)} в месяц`, b.sav>=perM?"Текущих сбережений на это хватает.":"Текущих сбережений не хватает, нужно сокращать расходы или сдвигать срок.");
+    fb+=fbItem(o4,`4. ${rub(b.price)} / ${rub(b.sav+b.cut)} → ${mNew} мес.`,"");
+    Object.assign(ans,{v1,v2,v3,v4});
+    return {score:s,max:8,ans,fb};
+  }};
+}});
+
+/* 8. Портфель и риск */
+T.push({ title:"Портфель и риск", sub:"Риск финансовых вложений", time:480, build(P){
+  const S0=P.port.S;
+  const ins=[["dep","Банковский вклад (застрахован АСВ)"],["ofz","Облигации федерального займа"],["stk","Акции крупных компаний"],["cry","Криптовалюта"],["pyr",`«Проект» с доходом ${P.port.pyr}% в месяц`]];
+  const signs=[["Гарантируют высокую доходность, намного выше ставок по вкладам",1],["Платят бонусы за привлечение новых участников",1],["Нет лицензии Банка России",1],["Торопят: «осталось два места», «только сегодня»",1],["Есть в Справочнике участников финансового рынка ЦБ",0],["Предупреждают, что доходность не гарантирована",0]];
+  const html=`<div class="q"><div class="qt">1. Расставьте инструменты по риску: 1 — самый низкий, 5 — самый высокий.</div>
+  ${ins.map(x=>`<div class="alloc" style="margin:6px 0"><span class="lbl">${x[1]}</span><select data-r="${x[0]}"><option value="">—</option>${[1,2,3,4,5].map(n=>`<option>${n}</option>`).join("")}</select></div>`).join("")}</div>
+  <div class="q"><div class="qt">2. У вас ${rub(S0)}. Ровно через год этими деньгами нужно оплатить учёбу, терять их нельзя. Распределите сумму.</div>
+  ${ins.map(x=>`<div class="alloc" style="margin:6px 0"><span class="lbl">${x[1]}</span><input inputmode="decimal" data-a="${x[0]}" placeholder="0"></div>`).join("")}
+  <div class="sumline" id="sumline">Распределено: 0 ₽ из ${rub(S0)}</div></div>
+  <div class="q"><div class="qt">3. Отметьте признаки финансовой пирамиды.</div><div class="check">${signs.map((x,i)=>`<label><input type="checkbox" data-s="${i}"> ${x[0]}</label>`).join("")}</div></div>`;
+  const rightRank={dep:1,ofz:2,stk:3,cry:4,pyr:5};
+  return { html, init(root){ const upd=()=>{ const t=$$("input[data-a]",root).reduce((s,e)=>s+(num(e.value)||0),0); const el=$("#sumline",root); el.textContent=`Распределено: ${rub(t)} из ${rub(S0)}`; el.classList.toggle("bad",Math.round(t)!==S0); }; $$("input[data-a]",root).forEach(e=>e.addEventListener("input",upd)); },
+  check(root){
+    let s=0, fb="", ans={rank:{},alloc:{},signs:[]};
+    let rk=0; ins.forEach(x=>{ const v=+$(`select[data-r="${x[0]}"]`,root).value; ans.rank[x[0]]=v; if(v===rightRank[x[0]])rk++; });
+    s+=rk; fb+=fbItem(rk===5,`1. Порядок: вклад → ОФЗ → акции → криптовалюта → «проект» (${rk} из 5)`,"Вклад защищён государством в пределах лимита, ОФЗ — долг государства, акции колеблются в цене, криптовалюта может обесцениться за дни, а пирамида рано или поздно рушится, и большинство участников теряет всё.");
+    const a={}; let tot=0; ins.forEach(x=>{ a[x[0]]=num($(`input[data-a="${x[0]}"]`,root).value)||0; tot+=a[x[0]]; }); ans.alloc=a;
+    let ps=0, notes=[];
+    if(Math.round(tot)!==S0){ notes.push(`Сумма не совпадает с ${rub(S0)}, пункт не засчитан.`); }
+    else{
+      if(a.pyr===0){ps+=2;} else notes.push("В «проект» вкладывать нельзя совсем.");
+      if((a.dep+a.ofz)/S0>=0.8){ps+=3;} else notes.push("Для денег, которые нужны через год, не меньше 80% должно лежать в надёжных инструментах.");
+      if(a.cry/S0<=0.05){ps+=1;} else notes.push("Криптовалюта для короткой и важной цели — слишком большой риск.");
+    }
+    s+=ps; fb+=fbItem(ps===6,`2. Распределение: ${ps} из 6`, notes.join(" ")||"Деньги, которые понадобятся скоро, хранят там, где их нельзя потерять.");
+    let ss=0; signs.forEach((x,i)=>{ const c=$(`input[data-s="${i}"]`,root).checked; if(c)ans.signs.push(i); if(c&&x[1])ss++; if(c&&!x[1])ss--; });
+    ss=Math.max(0,ss); s+=ss; fb+=fbItem(ss===4,`3. Признаки пирамиды: ${ss} из 4`,"Признаки: гарантия высокой доходности, бонусы за приглашённых, нет лицензии, давление и спешка.");
+    return {score:s,max:15,ans,fb};
+  }};
+}});
+
+/* 9. Антифрод */
+T.push({ title:"Антифрод", sub:"Финансовое мошенничество", time:480, build(P){
+  const f=P.fr, bank="Межрегионпромстройторгинвестсбервкладбанк";
+  const acts=[["hang","Положить трубку и перезвонить в банк по номеру с обратной стороны карты"],["link","Не открывать ссылку, удалить сообщение"],["app","Проверить в официальном приложении банка"],["voice","Связаться с человеком другим способом, например позвонить"],["code","Продиктовать или ввести код"],["pay","Перевести деньги"],["none","Ничего не делать, всё в порядке"]];
+  const M=[
+    ["call","Входящий звонок, +7 (9xx) xxx-xx-xx",`Здравствуйте, служба безопасности ${bank}. С вашей карты пытаются перевести ${rub(f.a1)}. Чтобы отменить операцию, продиктуйте код из СМС.`,"fraud",["hang"],"Сотрудник банка никогда не спрашивает коды из СМС, пароли и данные карты."],
+    ["push","Push-уведомление, приложение банка",`Покупка ${rub(f.a2)}. Продукты «У дома». Баланс обновлён.`,"real",["none","app"],"Обычное уведомление о вашей покупке. Если покупку вы не делали — проверьте в приложении и заблокируйте карту."],
+    ["call","Звонок, «Банк России»",`Я сотрудник Центрального банка. На вас пытаются оформить кредит. Срочно переведите все сбережения на безопасный счёт, его номер я продиктую.`,"fraud",["hang"],"У Банка России нет «безопасных счетов» для граждан, и ЦБ не звонит людям с такими просьбами."],
+    ["sms","Мессенджер, контакт «Дима (одногруппник)»",`Привет, срочно займи ${rub(f.a3)}, завтра верну! Скинь вот на эту карту, это мамина.`,"fraud",["voice"],"Аккаунты друзей взламывают и пишут от их имени. Позвоните другу и спросите голосом."],
+    ["sms","СМС, отправитель MRPST-BONUS",`Вам начислена компенсация ${rub(f.a4)}! Получите до конца дня: mrpstisvb-kompensaciya.ru/get`,"fraud",["link"],"Фишинговая ссылка: сайт похож на банковский, но адрес чужой. Внесёте данные карты — их украдут."],
+    ["push","Чат в приложении банка",`Срок вашего вклада «Долгий-Предолгий» заканчивается ${f.d} декабря. Продлить его можно в разделе «Вклады».`,"real",["app","none"],"Сообщение пришло в официальное приложение и ничего не требует срочно."],
+    ["call","Звонок, «Госуслуги»",`Ваш аккаунт на Госуслугах взломали. Чтобы мы его восстановили, назовите код, который сейчас придёт.`,"fraud",["hang"],"Код от Госуслуг даёт доступ к вашему аккаунту. Его никому не называют."],
+    ["call","Звонок, «курьерская служба»",`Вам доставка новой банковской карты. Для подтверждения времени доставки продиктуйте код из СМС.`,"fraud",["hang"],"Код из СМС при «доставке» — частая схема: на самом деле это код для входа в ваш банк или Госуслуги."],
+    ["call","Звонок с номера с обратной стороны вашей карты",`Мы приостановили перевод ${rub(f.a1)} незнакомому получателю. Если это были вы — подтвердите операцию в приложении. Никаких кодов сообщать не нужно.`,"real",["app","hang"],"Банк вправе приостановить подозрительную операцию. Он не просит кодов и предлагает проверить всё в приложении."]
+  ];
+  const ord=P.order.t9;
+  const html=`<p>В течение дня вам приходят сообщения и звонки. Для каждого определите, настоящее оно или мошенническое, и выберите, что делать.</p><div class="chat">${ord.map(i=>{const m=M[i];return `<div class="msg ${m[0]}"><div class="who"><span>${m[0]==="call"?"📞":m[0]==="push"?"🔔":"✉"} ${m[1]}</span><span>${String(9+i).padStart(2,"0")}:${String((i*17)%60).padStart(2,"0")}</span></div><div class="bubble">${m[2]}</div>
+  ${radios("v"+i,[{v:"real",t:"настоящее"},{v:"fraud",t:"мошенничество"}])}<select data-a="${i}" style="margin-top:8px"><option value="">— что делать? —</option>${acts.map(a=>`<option value="${a[0]}">${a[1]}</option>`).join("")}</select></div>`;}).join("")}</div>`;
+  return { html, check(root){
+    let s=0, fb="", ans={};
+    ord.forEach(i=>{ const m=M[i], v=getRadio(root,"v"+i), a=$(`select[data-a="${i}"]`,root).value; ans[i]=[v,a];
+      const o1=v===m[3], o2=m[4].includes(a); s+=(o1?1:0)+(o2?1:0);
+      fb+=fbItem(o1&&o2, `${m[1]}: ${m[3]==="fraud"?"мошенничество":"настоящее"}`, `${m[5]} Что делать: ${acts.find(x=>x[0]===m[4][0])[1].toLowerCase()}.`); });
+    fb+=`<p class="hint">Если деньги уже ушли мошенникам — сразу звоните в банк и пишите заявление в полицию. Защититься заранее помогает самозапрет на кредиты (Госуслуги или МФЦ).</p>`;
+    return {score:s,max:18,ans,fb};
+  }};
+}});
+
+/* 10. Куда жаловаться */
+T.push({ title:"Куда жаловаться", sub:"Защита прав потребителей финансовых услуг", time:360, build(P){
+  const c=P.cmp;
+  const to=[["bank","Претензия в сам банк"],["fu","Финансовый уполномоченный"],["cbr","Интернет-приёмная Банка России"],["court","Сразу в суд"],["fssp","ФССП (надзор за коллекторами)"],["police","Полиция"]];
+  const Q=[
+    [`Банк списал с карты комиссию ${rub(c.fee)}, которой нет в тарифах. Вы ещё никуда не обращались. С чего начать?`,"bank","Сначала письменная претензия в банк. Без неё финансовый уполномоченный обращение не примет."],
+    [`Вы направили банку претензию о возврате ${rub(c.small)}, прошло 30 дней, ответа нет.`,"fu","Споры с банками на сумму до 500 тыс. ₽ до суда рассматривает финансовый уполномоченный, это бесплатно."],
+    [`Банк отказался вернуть ${rub(c.big)}, претензию отклонил.`,"court","Сумма больше 500 тыс. ₽, поэтому можно идти сразу в суд."],
+    ["Банк постоянно звонит с рекламой, сотрудники грубят, вы хотите, чтобы регулятор проверил банк.","cbr","Жалобы на поведение финансовых организаций принимает Банк России через интернет-приёмную."],
+    ["Коллекторы звонят по ночам и угрожают родственникам.","fssp","Коллекторов контролирует ФССП. Звонить должнику ночью коллекторам запрещено законом."],
+    ["Вы перевели деньги мошеннику, который представился сотрудником банка. Банку уже позвонили.","police","После звонка в банк нужно подать заявление в полицию."],
+    ["Компания выдаёт займы, но её нет в реестре Банка России, и на сайте нет лицензии.","cbr","О нелегальных кредиторах и пирамидах сообщают в Банк России."]
+  ];
+  const ord=P.order.t10;
+  const html=`<p>Для каждой ситуации выберите, куда обратиться в первую очередь.</p>${ord.map(i=>`<div class="q"><div class="qt">${Q[i][0]}</div><select data-i="${i}"><option value="">— выберите —</option>${to.map(t=>`<option value="${t[0]}">${t[1]}</option>`).join("")}</select></div>`).join("")}`;
+  return { html, check(root){
+    let s=0, fb="", ans={};
+    ord.forEach(i=>{ const v=$(`select[data-i="${i}"]`,root).value; ans[i]=v; const ok=v===Q[i][1]; if(ok)s+=2;
+      fb+=fbItem(ok, to.find(t=>t[0]===Q[i][1])[1], Q[i][2]); });
+    return {score:s,max:14,ans,fb};
+  }};
+}});
+
+/* 11. Цифровые услуги */
+T.push({ title:"Цифровые финансовые услуги", sub:"СБП, цифровой рубль, самозапрет", time:360, build(P){
+  const Q=[
+    ["Сколько можно бесплатно перевести другим людям через СБП из одного банка за календарный месяц?",["100 000 ₽","30 000 ₽","1 000 000 ₽","без ограничений"],0],
+    ["Какая комиссия за перевод другому человеку через СБП сверх бесплатного лимита?",["0,5% от суммы, но не больше 1 500 ₽","3% от суммы","фиксированные 100 ₽","перевод запрещён"],0],
+    ["Сколько можно бесплатно перевести через СБП между своими счетами в разных банках за месяц?",["до 30 млн ₽","до 100 000 ₽","до 1 млн ₽","только 50 000 ₽"],0],
+    ["Кто управляет платформой цифрового рубля?",["Банк России","каждый банк свою","Министерство финансов","Агентство по страхованию вкладов"],0],
+    ["Начисляют ли проценты на цифровые рубли на счёте?",["нет","да, как по вкладу","да, по ключевой ставке","только пенсионерам"],0],
+    ["С какой даты крупнейшие банки обязаны дать клиентам доступ к цифровому рублю?",["1 сентября 2026 года","1 января 2024 года","1 марта 2025 года","1 сентября 2028 года"],0],
+    ["Где можно установить самозапрет на кредиты?",["на Госуслугах или в МФЦ","только в отделении своего банка","в налоговой","по звонку в банк"],0],
+    ["На что самозапрет НЕ распространяется?",["на ипотеку и автокредит под залог машины","на кредитные карты","на займы в МФО","на потребительские кредиты"],0]
+  ];
+  const ord=P.order.t11, R=mkRng(S.seed+11);
+  const sh=Q.map(q=>R.shuffle(q[1].map((t,i)=>({t,i}))));
+  const html=ord.map(i=>`<div class="q"><div class="qt">${Q[i][0]}</div>${radios("d"+i,sh[i].map(o=>({v:o.i,t:o.t})))}</div>`).join("");
+  return { html, check(root){
+    let s=0, fb="", ans={};
+    ord.forEach(i=>{ const v=getRadio(root,"d"+i); ans[i]=v; const ok=v==="0"; if(ok)s++; if(!ok) fb+=fbItem(false,Q[i][0],`Правильно: ${Q[i][1][0]}.`); });
+    if(!fb) fb=fbItem(true,"Все ответы верны","");
+    return {score:s,max:8,ans,fb};
+  }};
+}});
+
+/* ===== Состояние и экраны ===== */
+let S = load();
+const app = $("#app"), timerEl = $("#timer");
+let tick = null, curCheck = null;
+
+function totals(){ let s=0,m=0; T.forEach((t,i)=>{ const r=S.res[i]; if(r){s+=r.score;m+=r.max;} }); return {s,m}; }
+function maxAll(){ return [12,12,10,8,10,14,8,15,18,14,8].reduce((a,b)=>a+b,0); }
+
+function start(){
+  if(S && S.fio){ S.reloads=(S.reloads||0)+1; store(); route(); return; }
+  timerEl.textContent="";
+  app.innerHTML=`<section class="card hero"><h1>Межрегион&shy;пром&shy;строй&shy;торг&shy;инвест&shy;сбер&shy;вклад&shy;банк</h1>
+  <p>Учебный интернет-банк. Здесь можно потерять только баллы.</p>
+  <p class="lic">Учебная лицензия № 0. Банк вымышленный, совпадения с настоящими банками случайны.</p></section>
+  <section class="card"><h2>Открытие счёта</h2>
+  <p class="hint">У каждого клиента свои условия: числа в заданиях зависят от ФИО и группы.</p>
+  <label for="fio">Фамилия, имя, отчество</label><input id="fio" autocomplete="name" placeholder="Иванов Иван Иванович">
+  <label for="grp">Группа</label><input id="grp" autocomplete="off" placeholder="Например, ЮЗ-101">
+  <div class="check" style="margin-top:12px"><label><input type="checkbox" id="agree"> Я понимаю, что на каждую операцию отведено ограниченное время, а вернуться к выполненной операции нельзя</label></div>
+  <div class="err" id="err"></div>
+  <button class="btn" id="go">Открыть счёт</button></section>
+  <section class="card"><h3>Что вас ждёт</h3><ul class="ops">${T.map((t,i)=>`<li class="op"><div class="n">${i+1}</div><div class="t"><b>${t.title}</b><span>${t.sub} · ${Math.round(t.time/60)} мин</span></div></li>`).join("")}</ul></section>
+  <p class="foot">Межрегионпромстройторгинвестсбервкладбанк, 2026</p>`;
+  $("#go").onclick=()=>{
+    const fio=$("#fio").value.trim().replace(/\s+/g," "), grp=$("#grp").value.trim().toUpperCase();
+    if(fio.split(" ").length<2){ $("#err").textContent="Введите фамилию и имя полностью."; return; }
+    if(grp.length<2){ $("#err").textContent="Укажите группу."; return; }
+    if(!$("#agree").checked){ $("#err").textContent="Отметьте согласие с условиями."; return; }
+    const seed=hash(fio.toLowerCase()+"|"+grp);
+    S={fio,grp,seed,id:seed.toString(36)+"-"+Date.now().toString(36),started:Date.now(),cur:0,taskStart:null,res:[],exits:[],reloads:0,finished:false};
+    store(); send(); route();
+  };
+}
+
+function route(){
+  $("#who").textContent = S && S.fio ? `${S.fio} · ${S.grp}` : "Учебный интернет-банк";
+  if(S.finished) return finish();
+  if(S.taskStart) return openTask(S.cur);
+  dashboard();
+}
+
+function dashboard(){
+  clearInterval(tick); timerEl.textContent="";
+  const t=totals();
+  app.innerHTML=`<section class="card hero"><div class="balance"><div><div class="lic">Бонусный счёт № ${S.seed.toString().slice(0,4)} ${S.seed.toString().slice(4)}</div><div class="sum">${t.s} баллов</div></div><div class="lic">из ${maxAll()} возможных</div></div></section>
+  <section class="card"><h2>Операции</h2><ul class="ops">${T.map((x,i)=>{ const r=S.res[i]; const cls=r?"done":i===S.cur?"current":"locked";
+    return `<li class="op ${cls}"><div class="n">${r?"✓":i+1}</div><div class="t"><b>${x.title}</b><span>${x.sub} · ${Math.round(x.time/60)} мин</span></div><div class="s">${r?`${r.score}/${r.max}`:""}</div></li>`; }).join("")}</ul>
+  <button class="btn" id="next">${S.cur===0?"Начать первую операцию":"Следующая операция"}</button></section>`;
+  $("#next").onclick=()=>{ S.taskStart=Date.now(); store(); openTask(S.cur); };
+  window.scrollTo(0,0);
+}
+
+function openTask(i){
+  const t=T[i], P=genParams(S.seed), b=t.build(P);
+  app.innerHTML=`<section class="card"><div class="task-h">Операция ${i+1} из ${T.length} · ${t.sub}</div><h2>${t.title}</h2><div id="tbody">${b.html}</div>
+  <div class="err" id="terr"></div><button class="btn green" id="submit">Провести операцию</button></section>`;
+  const root=$("#tbody");
+  if(b.init) b.init(root);
+  curCheck=()=>b.check(root);
+  $("#submit").onclick=()=>{ if(confirm("Провести операцию? Изменить ответы будет нельзя.")) submitTask(i,false); };
+  clearInterval(tick);
+  const upd=()=>{ const left=Math.max(0, t.time - Math.floor((Date.now()-S.taskStart)/1000));
+    timerEl.textContent=`${Math.floor(left/60)}:${String(left%60).padStart(2,"0")}`; timerEl.classList.toggle("warn",left<=30);
+    if(left<=0){ clearInterval(tick); submitTask(i,true); } };
+  upd(); tick=setInterval(upd,1000);
+  window.scrollTo(0,0);
+}
+
+function submitTask(i, timeout){
+  if(S.res[i]) return;
+  clearInterval(tick); timerEl.textContent="";
+  const r=curCheck(); r.sec=Math.round((Date.now()-S.taskStart)/1000); r.timeout=timeout;
+  const fb=r.fb; delete r.fb;
+  S.res[i]=r; S.cur=i+1; S.taskStart=null;
+  if(S.cur>=T.length) S.finished=true;
+  store(); send();
+  const okAll=r.score===r.max;
+  app.innerHTML=`<section class="card"><div class="task-h">Операция ${i+1} проведена${timeout?" · время вышло":""}</div>
+  <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="score-big">${r.score}<span style="font-size:22px;color:var(--muted)">/${r.max}</span></div><span class="stamp ${okAll?"ok":""}">${okAll?"Одобрено":r.score>=r.max*0.6?"Исполнено частично":"Требует доработки"}</span></div>
+  <div class="fb">${fb}</div><button class="btn" id="cont">${S.finished?"Итоги":"К операциям"}</button></section>`;
+  $("#cont").onclick=()=>route();
+  window.scrollTo(0,0);
+}
+
+function finish(){
+  clearInterval(tick); timerEl.textContent="";
+  const t=totals(), p=Math.round(t.s/maxAll()*100);
+  app.innerHTML=`<section class="card hero"><div class="lic">Выписка по бонусному счёту</div><div class="sum" style="font-family:'PT Serif',serif;font-size:44px;font-weight:700;color:var(--gold2)">${t.s} из ${maxAll()}</div><p>${p}% · ${S.fio}, ${S.grp}</p></section>
+  <section class="card"><h2>Выписка</h2><table class="mini">${T.map((x,i)=>`<tr><td>${i+1}. ${x.title}</td><td>${S.res[i]?S.res[i].score+"/"+S.res[i].max:"—"}</td></tr>`).join("")}</table>
+  <p class="hint" id="sendst">${S.sent?"Результат отправлен преподавателю.":"Отправляем результат…"}</p>
+  <button class="btn green" id="resend">Отправить ещё раз</button></section>
+  <p class="foot">Счёт закрыт. Межрегионпромстройторгинвестсбервкладбанк благодарит вас за то, что вы дочитали его название.</p>`;
+  $("#resend").onclick=()=>send(true);
+  send();
+}
+
+/* ===== Отправка в таблицу ===== */
+function payload(){
+  const t=totals();
+  return { id:S.id, fio:S.fio, group:S.grp, seed:S.seed, status:S.finished?"завершено":"в процессе",
+    score:t.s, max:maxAll(), percent:Math.round(t.s/maxAll()*100),
+    tasks:T.map((x,i)=>S.res[i]?`${S.res[i].score}/${S.res[i].max}${S.res[i].timeout?" ⏱":""}`:""),
+    exits:S.exits.length, exitsLog:S.exits.map(e=>`${new Date(e.t).toLocaleTimeString("ru-RU")} (оп. ${e.task+1}, ${e.sec} с)`).join("; "),
+    reloads:S.reloads||0, started:new Date(S.started).toLocaleString("ru-RU"),
+    minutes:Math.round((Date.now()-S.started)/60000),
+    details:JSON.stringify(S.res.map(r=>r&&{s:r.score,m:r.max,sec:r.sec,a:r.ans})) };
+}
+function send(manual){
+  if(!S || !S.fio) return;
+  const st=$("#sendst");
+  if(!SCRIPT_URL){ if(st) st.textContent="Таблица результатов ещё не подключена. Покажите этот экран преподавателю."; return; }
+  fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload())})
+    .then(()=>{ if(S.finished){S.sent=true;store();} if(st) st.textContent="Результат отправлен преподавателю."; })
+    .catch(()=>{ if(st) st.textContent="Не удалось отправить. Проверьте интернет и нажмите «Отправить ещё раз»."; });
+}
+
+/* ===== Защита ===== */
+["copy","cut","paste","contextmenu","dragstart","drop","selectstart"].forEach(ev=>document.addEventListener(ev,e=>{
+  if(ev==="selectstart" && e.target.closest && e.target.closest("input,textarea")) return;
+  e.preventDefault();
+},true));
+document.addEventListener("keydown",e=>{ if((e.ctrlKey||e.metaKey)&&["c","v","x","a","p","s","u"].includes(e.key.toLowerCase())) e.preventDefault(); },true);
+let hiddenAt=null;
+function goneAway(){ if(!S||!S.fio||S.finished||hiddenAt) return; hiddenAt=Date.now(); }
+function cameBack(){ if(!hiddenAt) return; const sec=Math.round((Date.now()-hiddenAt)/1000); hiddenAt=null; if(sec<1) return; S.exits.push({t:Date.now(),task:S.cur,sec}); store(); }
+document.addEventListener("visibilitychange",()=>document.hidden?goneAway():cameBack());
+window.addEventListener("blur",goneAway); window.addEventListener("focus",cameBack);
+window.addEventListener("pagehide",goneAway);
+
+start();
+</script>
+</body>
+</html>
